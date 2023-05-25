@@ -8,7 +8,11 @@ const envVarsSchema = Joi.object()
   .keys({
     NODE_ENV: Joi.string().valid('production', 'development', 'test').required(),
     PORT: Joi.number().default(3000),
-    MONGODB_URL: Joi.string().required().description('Mongo DB url'),
+    MONGODB_USER: Joi.string().required().description('Mongo DB user'),
+    MONGODB_PASSWORD: Joi.string().required().description('Mongo DB password'),
+    MONGODB_HOST: Joi.string().required().description('Mongo DB host'),
+    MONGODB_PORT: Joi.number().default(27017),
+    MONGODB_DATABASE: Joi.string().required().description('Mongo DB database name'),
     JWT_SECRET: Joi.string().required().description('JWT secret key'),
     JWT_ACCESS_EXPIRATION_MINUTES: Joi.number().default(30).description('minutes after which access tokens expire'),
     JWT_REFRESH_EXPIRATION_DAYS: Joi.number().default(30).description('days after which refresh tokens expire'),
@@ -35,8 +39,12 @@ if (error) {
 module.exports = {
   env: envVars.NODE_ENV,
   port: envVars.PORT,
-  mongoose: {
-    url: envVars.MONGODB_URL + (envVars.NODE_ENV === 'test' ? '-test' : ''),
+  mongo: {
+    user: envVars.MONGODB_USER,
+    password: envVars.MONGODB_PASSWORD,
+    host: envVars.MONGODB_HOST,
+    port: envVars.MONGODB_PORT,
+    database: envVars.MONGODB_DATABASE,
     options: {
       autoIndex: true,
     },
