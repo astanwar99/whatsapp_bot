@@ -79,7 +79,7 @@ const whatsappMessageSchema = mongoose.Schema(
       ref: 'WhatsappJourney',
     },
     journeyMessageSequence: {
-      type: String,
+      type: Number,
     },
   },
   {

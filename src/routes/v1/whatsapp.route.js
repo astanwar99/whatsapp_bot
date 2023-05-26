@@ -17,6 +17,9 @@ router.post('/send-template-text-message', auth(), whatsappController.sendTempla
 router.post('/send-template-image-message', auth(), whatsappController.sendTemplateImageMessage);
 router.post('/send-template-interactive-message', auth(), whatsappController.sendTemplateInteractiveMessage);
 
+router.get('/callback', whatsappController.verificationCallback);
+router.post('/callback', whatsappController.eventNotificationCallback);
+
 // Whatsapp Journey
 router.get('/journeys', auth(), validate(whatsappValidation.getWhatsappJourneys), whatsappController.getWhatsappJourneys);
 router.post(

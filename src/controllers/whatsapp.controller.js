@@ -1,4 +1,5 @@
 const httpStatus = require('http-status');
+const querystring = require('querystring');
 const { whatsappService } = require('../services');
 const catchAsync = require('../utils/catchAsync');
 const pick = require('../utils/pick');
@@ -79,6 +80,22 @@ const deleteWhatsappJourney = catchAsync(async (req, res) => {
   res.status(httpStatus.NO_CONTENT).send();
 });
 
+const verificationCallback = catchAsync(async (req, res) => {
+  const query = querystring.parse(req.url.split('?')[1]);
+
+  const hubMode = query['hub.mode'];
+  const hubChallenge = query['hub.challenge'];
+  const hubVerifyToken = query['hub.verify_token'];
+
+  const response = await whatsappService.verificationCallback(hubMode, hubChallenge, hubVerifyToken);
+  res.status(httpStatus.OK).send(response);
+});
+
+const eventNotificationCallback = catchAsync(async (req, res) => {
+  await whatsappService.eventNotificationCallback(req);
+  res.status(httpStatus.OK).send();
+});
+
 module.exports = {
   sendTextMessage,
   sendImageMessage,
@@ -94,4 +111,6 @@ module.exports = {
   createWhatsappJourney,
   updateWhatsappJourney,
   deleteWhatsappJourney,
+  verificationCallback,
+  eventNotificationCallback,
 };
